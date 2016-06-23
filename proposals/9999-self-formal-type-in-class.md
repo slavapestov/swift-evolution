@@ -7,14 +7,14 @@
 
 ## Introduction
 
-This proposal makes the 'self' value behave consistently whether or
-not it is used from a method with a 'Self' return type.
+This proposal makes the `self` value behave consistently whether or
+not it is used from a method with a `Self` return type.
 
 Swift-evolution thread: [Discussion thread topic for that proposal](http://news.gmane.org/gmane.comp.lang.swift.evolution)
 
 ## Motivation
 
-Right now, we exhibit inconsistent behavior when 'self' is used as
+Right now, we exhibit inconsistent behavior when `self` is used as
 an argument to a generic function, violating the principle of least
 surprise.
 
@@ -74,7 +74,7 @@ Here, the type of `self` would always be `Derived` when called on an
 instance of the derived class.
 
 Of course a more useful program could instead do something with the
-type parameter 'T', such as constraining it to a protocol or a class
+type parameter `T`, such as constraining it to a protocol or a class
 with a required initializer, and then using the type to construct
 a new instance of the class.
 
@@ -95,10 +95,10 @@ class ArtClass {
 
 ## Detailed design
 
-There's really not much more to say here. The code for dynamic 'Self'
+There's really not much more to say here. The code for dynamic `Self`
 is mostly in place already, however enabling this change might expose
 some new bugs we have not yet encountered, because currently, methods
-with dynamic 'Self' return type are relatively rare.
+with dynamic `Self` return type are relatively rare.
 
 ## Impact on existing code
 
