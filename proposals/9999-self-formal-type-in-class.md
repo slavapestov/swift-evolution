@@ -1,4 +1,4 @@
-# Feature name
+# Consistent formal type for 'self' in class methods
 
 * Proposal: [SE-9999](9999-self-formal-type-in-class.md)
 * Author: [Slava Pestov](https://github.com/slavapestov)
@@ -55,6 +55,12 @@ Derived
 Base
 ```
 
+Note that there's no inconsistency when the method is called on the
+base class. When called on the derived class however, we see that
+in a method with a dynamic `Self` return type, the type of `self` is
+`Derived`, whereas in a method with any other return type, the type
+of `self` is `Base`.
+
 With this proposal, the above code will instead produce the following:
 
 ```swift
@@ -64,6 +70,9 @@ Derived
 Derived
 ```
 
+Here, the type of `self` would always be `Derived` when called on an
+instance of the derived class.
+
 Of course a more useful program could instead do something with the
 type parameter 'T', such as constraining it to a protocol or a class
 with a required initializer, and then using the type to construct
@@ -71,8 +80,18 @@ a new instance of the class.
 
 ## Proposed solution
 
-The proposal is to change the type of 'self' to always be 'Self', and
-not the static type of the class.
+The proposal is to change the type of `self` to always be `Self`, which
+can be thought of as a special generic type parameter bound to the
+dynamic type of the instance.
+
+This also opens the door to generalizing `Self`, for example by allowing
+it to appear in covariant position within parameter types:
+
+```swift
+class ArtClass {
+  func paint(withBrush: (Self) -> ()) { ... }
+}
+```
 
 ## Detailed design
 
