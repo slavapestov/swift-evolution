@@ -61,6 +61,12 @@ in a method with a dynamic `Self` return type, the type of `self` is
 `Derived`, whereas in a method with any other return type, the type
 of `self` is `Base`.
 
+## Proposed solution
+
+The proposal is to change the type of `self` to always be `Self`, which
+can be thought of as a special generic type parameter bound to the
+dynamic type of the instance.
+
 With this proposal, the above code will instead produce the following:
 
 ```swift
@@ -78,13 +84,9 @@ type parameter `T`, such as constraining it to a protocol or a class
 with a required initializer, and then using the type to construct
 a new instance of the class.
 
-## Proposed solution
+This also dovetails nicely with [SE-0068](0068-universal-self.md).
 
-The proposal is to change the type of `self` to always be `Self`, which
-can be thought of as a special generic type parameter bound to the
-dynamic type of the instance.
-
-This also opens the door to generalizing `Self`, for example by allowing
+Finally, it opens the door to generalizing dynamic `Self`, allowing
 it to appear in covariant position within parameter types:
 
 ```swift
@@ -93,12 +95,22 @@ class ArtClass {
 }
 ```
 
+This would allow a class to conform to a protocol with a requirement
+written like the following, something that is currently not possible
+at all:
+
+```swift
+protocol OddProtocol {
+  func weaken<X, Y>((Self) -> (X) -> Y) -> (X) -> Y
+}
+```
+
 ## Detailed design
 
-There's really not much more to say here. The code for dynamic `Self`
-is mostly in place already, however enabling this change might expose
-some new bugs we have not yet encountered, because currently, methods
-with dynamic `Self` return type are relatively rare.
+There's really not much more to say here. The code for typing `self`
+with a dynamic `Self` is in place already, however enabling this change
+might expose some new bugs we have not yet encountered, because
+currently, methods with dynamic `Self` return type are relatively rare.
 
 ## Impact on existing code
 
